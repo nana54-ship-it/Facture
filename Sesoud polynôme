@@ -1,0 +1,125 @@
+#include <stdio.h>
+
+#define MAX_POLY 10
+#define MAX_DEGREE 20
+
+int main() 
+{
+    int P[MAX_POLY][MAX_DEGREE + 1] = {0}; // Coefficients
+    int D[MAX_POLY]; // Degrés
+    int n, i, j, k;
+
+    printf ("Bienvenue sur la plateforme qui vous aide à calculer la somme, la différence, la multiplication, le quotient de vos différents polyn\n")
+    printf("\nCombien de polynomes voulez-vous saisir ? ");
+    scanf("%d", &n);
+
+    for (i = 0; i < n; i++) 
+    {
+        printf("\nPolynome %d\n", i + 1);
+        printf("Degré du polynome : ");
+        scanf("%d", &D[i]);
+
+        printf("Entrez les coefficients (degré 0 à %d) :\n", D[i]);
+        for (j = 0; j <= D[i]; j++) 
+        {
+            printf("Coeff x^%d : ", j);
+            scanf("%d", &P[i][j]);
+        }
+     }
+
+    int choix, p1, p2;
+    printf("\nChoisissez l'operation :\n1. Somme\n2. Difference\n3. Produit\n4. Division\nVotre choix : ");
+    scanf("%d", &choix);
+
+    printf("Choisissez les deux polynomes à utiliser (index de 0 à %d) :\n", n - 1);
+    printf("Indice du premier polynome : "); scanf("%d", &p1);
+    printf("Indice du second polynome : "); scanf("%d", &p2);
+
+    int R[2 * MAX_DEGREE + 1] = {0}; // Résultat
+
+    switch (choix) 
+    {
+        case 1: // Somme
+            for (i = 0; i <= (D[p1] > D[p2] ? D[p1] : D[p2]); i++) 
+            {
+                R[i] = P[p1][i] + P[p2][i];
+            }
+            printf("\nSomme : ");
+            for (i = 0; i <= (D[p1] > D[p2] ? D[p1] : D[p2]); i++) 
+            {
+                if (R[i]) printf("%+dx^%d ", R[i], i);
+            }
+            break;
+
+        case 2: // Différence
+            for (i = 0; i <= (D[p1] > D[p2] ? D[p1] : D[p2]); i++) 
+            {
+                R[i] = P[p1][i] - P[p2][i];
+            }
+            printf("\nDifférence : ");
+            for (i = 0; i <= (D[p1] > D[p2] ? D[p1] : D[p2]); i++) 
+            {
+                if (R[i]) printf("%+dx^%d ", R[i], i);
+            }
+            break;
+
+        case 3: // Produit
+            for (i = 0; i <= D[p1]; i++) 
+            {
+                for (j = 0; j <= D[p2]; j++) 
+                {
+                    R[i + j] += P[p1][i] * P[p2][j];
+                }
+            }
+            printf("\nProduit : ");
+            for (i = 0; i <= D[p1] + D[p2]; i++) 
+            {
+                if (R[i]) printf("%+dx^%d ", R[i], i);
+            }
+            break;
+
+        case 4: 
+       { // Division
+            int Q[MAX_DEGREE + 1] = {0}, A[MAX_DEGREE + 1];
+            int degA = D[p1], degB = D[p2];
+
+            for (i = 0; i <= degA; i++) A[i] = P[p1][i];
+            while (degA >= degB && P[p2][degB] != 0) 
+            {
+                int coef = A[degA] / P[p2][degB];
+                int degDiff = degA - degB;
+                Q[degDiff] = coef;
+
+                for (i = 0; i <= degB; i++) 
+                {
+                    A[degDiff + i] -= coef * P[p2][i];
+                }
+
+                while (degA >= 0 && A[degA] == 0) degA--;
+            }
+
+            printf("\nQuotient : ");
+            for (i = 0; i <= MAX_DEGREE; i++) 
+            {
+                if (Q[i]) printf("%+dx^%d ", Q[i], i);
+            }
+
+            printf("\nReste : ");
+            for (i = 0; i <= degA; i++) 
+            {
+                if (A[i]) printf("%+dx^%d ", A[i], i);
+            }
+            break;
+        }
+
+        default:
+            printf("Choix invalide.");
+    }
+
+    return 0;
+}
+```
+
+---
+
+Souhaitez-vous une *version commentée ligne par ligne* ou une *amélioration avec interface console plus intuitive* ?
